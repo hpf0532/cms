@@ -80,27 +80,27 @@ WSGI_APPLICATION = 'cms.wsgi.application'
 # }
 
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'USER': 'root',
-#         'HOST': '172.16.100.188',
-#         'PORT': 3306,
-#         'PASSWORD': 'passw0rd',
-#         'NAME': "cms",
-#     }
-# }
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'USER': 'cms',
-        'HOST': '192.168.200.41',
+        'USER': 'root',
+        'HOST': '172.16.100.188',
         'PORT': 3306,
-        'PASSWORD': 'KDlasgpsd9786',
+        'PASSWORD': 'passw0rd',
         'NAME': "cms",
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'USER': 'cms',
+#         'HOST': '192.168.200.41',
+#         'PORT': 3306,
+#         'PASSWORD': 'KDlasgpsd9786',
+#         'NAME': "cms",
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
