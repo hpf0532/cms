@@ -1,0 +1,13 @@
+[2019-07-26 10:51:39,862][MainThread:139925943555904][task_id:django.request][exception.py:135][ERROR][Internal Server Error: /login/]
+Traceback (most recent call last):
+  File "/usr/local/python36/lib/python3.6/site-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/usr/local/python36/lib/python3.6/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/usr/local/python36/lib/python3.6/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/mnt/wwwroot/cms/app01/views.py", line 59, in login
+    status = request.session[gt.GT_STATUS_SESSION_KEY]
+  File "/usr/local/python36/lib/python3.6/site-packages/django/contrib/sessions/backends/base.py", line 57, in __getitem__
+    return self._session[key]
+KeyError: 'gt_server_status'

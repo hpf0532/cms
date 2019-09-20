@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/fontawesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/static/mystyle.css">
+</head>
+<body>
+
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">CMS</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
+                <li><a href="#">Link</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                {% if request.user.username %}
+                    <li><a href="#">{{ request.user.username }}</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                           aria-expanded="false">个人中心 <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Action</a></li>
+                            <li><a href="#">Another action</a></li>
+                            <li><a href="#">Something else here</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="/logout/">退出</a></li>
+                        </ul>
+                    </li>
+                {% else %}
+                    <li><a href="/login/">登录</a></li>
+                    <li><a href="/reg/">注册</a></li>
+                {% endif %}
+
+
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+<!--主页面 开始-->
+<div class="container index-content">
+    <div class="row">
+        <div class="col-md-2">
+            <div class="panel panel-primary">
+                <div class="panel-heading">左侧广告位一</div>
+                <div class="panel-body">
+                    虚位以待
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">左侧广告位二</div>
+                <div class="panel-body">
+                    虚位以待
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            {% csrf_token %}
+            <label style="display: block" for="id-pack">
+                <div class="upload">点击选择文件</div>
+            </label>
+            <input style="display: none;" type="file" name="package" id="id-pack">
+            <button id="upload-btn" class="btn btn-primary">上传文件<i id="loading" style="margin-left: 5px" class="fa fa-spinner none"></i></button>
+            <span class="information"></span>
+            <div class="copy none">
+                <form class="form-inline">
+                    <div class="form-group">
+                        <label class="sr-only" for="cdn-url">Amount (in dollars)</label>
+                        <div class="input-group">
+
+                            <input type="text" class="form-control" id="cdn-url" placeholder="CDN URL">
+
+                        </div>
+                    </div>
+                    <button id="copy-btn" class="btn btn-info">点击复制</button>
+                </form>
+            </div>
+            <div class="tips">
+                <h3>Tips:</h3>
+                <ul>
+                    <li>登录后首先选择要上传的文件，文件名只支持.apk和.ipa结尾，否则视为非法。</li>
+                    <li>点击上传文件button开始上传文件，其中包括CDN的刷新，(CDN刷新预计在5分钟左右)。</li>
+                    <li>上传成功后会有url复制提示框，点击复制即可。</li>
+                    <li><span style="color: red">文件上传为覆盖操作，服务器不会保留之前的版本，请谨慎操作！！！</span></li>
+                    <li>如出现错误请联系作者解决。</li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="panel panel-primary">
+                <div class="panel-heading">右侧广告位一</div>
+                <div class="panel-body">
+                    虚位以待
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">右侧广告位二</div>
+                <div class="panel-body">
+                    虚位以待
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--主页面 结束-->
+<script src="/static/jquery-3.3.1.js"></script>
+<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+<script>
+    // 点击复制事件
+    $("#copy-btn").click(function () {
+        //获取要取值的input的元素
+        var inputElement = document.getElementById("cdn-url");
+        //选中input框的内容
+        inputElement.select();
+        // 执行浏览器复制命令
+        document.execCommand("Copy");
+        //提示已复制
+        alert('url已复制');
+    });
+
+    $("#id-pack").change(function () {
+        // 获取用户上传的文件名
+        var fileName = $("#id-pack")[0].files[0].name;
+        $(".upload").text("即将上传: " + fileName);
+    });
+
+    $("#upload-btn").on("click", function () {
+        // 加载中
+        $("#loading").toggleClass("none");
+
+        $(".information").text("");
+        var file = $("#id-pack")[0].files[0];
+
+        // 判断用户是否选择文件
+        if (file === undefined) {
+            $(".information").removeClass("succeed").addClass("faild").text("请先选择文件");
+            $("#loading").toggleClass("none");
+            return false;
+        }
+        // 取到用户上传文件，向后端发送AJAX请求
+        var formData = new FormData();
+
+        var csrfmiddlewaretoken = $("[name='csrfmiddlewaretoken']").val();
+
+        formData.append("csrfmiddlewaretoken", csrfmiddlewaretoken);
+        formData.append("package", file);
+
+        $.ajax({
+            url: "/index/",
+            type: "post",
+            processData: false, // 告诉jQuery不要处理我的数据
+            contentType: false,  // 告诉jQuery不要设置content类型
+            data: formData,
+            success: function (data) {
+                if (data.status) {
+                    // 有错误
+                    console.log(data.msg);
+                    $(".information").removeClass("succeed").addClass("faild").text(data.msg);
+                } else {
+                    // 上传成功
+                    console.log(data.msg);
+                    $(".information").removeClass("faild").addClass("succeed").text(data.msg);
+                    $("#cdn-url").val(data.url);
+                    $(".copy").removeClass("none");
+
+                }
+                $(".upload").text("点击选择文件");
+                $("#loading").toggleClass("none");
+            }
+        })
+    });
+</script>
+</body>
+</html>

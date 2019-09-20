@@ -1,0 +1,13 @@
+/*个人博客主页样式*/
+.header {
+    height: 50px;
+    width: 100%;
+    background-color: red;
+    color: black;
+}
+
+.header p {
+    font-size: 24px;
+    font-weight: bold;
+    padding: 10px;
+}

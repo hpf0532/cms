@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/mystyle.css">
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <form class="form-horizontal login-form">
+                <div class="form-group">
+                    <label for="username" class="col-sm-2 control-label">用户名</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="username" name="username" placeholder="用户名">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="password" class="col-sm-2 control-label">密码</label>
+                    <div class="col-sm-10">
+                        <input type="password" class="form-control" id="password" name="password" placeholder="密码">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="valid_code" class="col-sm-2 control-label">验证码</label>
+                    <div class="col-sm-10">
+                        <input type="text"  id="valid_code" name="vaild_code" placeholder="">
+                        <img id="vaild_img" class="valid-img" src="/get_valid_img.png?" alt="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button id="login-button" type="button" class="btn btn-primary">登录</button>
+                        <span class="login-error"></span>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="/static/jquery-3.3.1.js"></script>
+<script src="/static/bootstrap/js/bootstrap.min.js"></script>
+<script src="/static/setupajax.js"></script>
+
+<script>
+    // 点击登录事件
+    $("#login-button").on("click", function () {
+        var username = $("#username").val();
+        var password = $("#password").val();
+        var vaildCode = $("#valid_code").val();
+        // ajax提交到后台
+        $.ajax({
+            url: "/login/",
+            type: "POST",
+            data: {
+                "username": username,
+                "password": password,
+                "vaild_code": vaildCode
+            },
+            success: function (data) {
+                console.log(data);
+                if(data.status){
+                    $(".login-error").text(data.msg);
+                    $("#vaild_img")[0].src = "/get_valid_img.png?r=" + Math.ceil(Math.random()*10);
+                }else{
+                    location.href = data.msg;
+                }
+
+            }
+        })
+    });
+    // 点击验证码刷新
+    $("#vaild_img").on("click", function () {
+        $(this)[0].src = "/get_valid_img.png?r=" + Math.ceil(Math.random()*10);
+    });
+
+    // 当input框获取焦点时将之前的错误清空
+    $("#username, #password").on("focus", function () {
+        $(".login-error").text("")
+    })
+</script>
+
+
+</body>
+</html>
