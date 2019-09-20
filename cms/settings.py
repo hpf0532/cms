@@ -15,6 +15,10 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+# 文件上传路径
+UPLOAD_DIR = "/mnt/wwwroot/apk/"
+# UPLOAD_DIR = BASE_DIR
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
@@ -80,27 +84,27 @@ WSGI_APPLICATION = 'cms.wsgi.application'
 # }
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'USER': 'root',
-        'HOST': '172.16.100.188',
-        'PORT': 3306,
-        'PASSWORD': 'passw0rd',
-        'NAME': "cms",
-    }
-}
-
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.mysql',
-#         'USER': 'cms',
-#         'HOST': '192.168.200.41',
+#         'USER': 'root',
+#         'HOST': '172.16.100.188',
 #         'PORT': 3306,
-#         'PASSWORD': 'KDlasgpsd9786',
+#         'PASSWORD': 'passw0rd',
 #         'NAME': "cms",
 #     }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'USER': 'cms',
+        'HOST': '192.168.200.41',
+        'PORT': 3306,
+        'PASSWORD': 'KDlasgpsd9786',
+        'NAME': "cms",
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
@@ -158,7 +162,8 @@ SESSION_COOKIE_AGE = 86400
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # 项目级别的日志配置
-BASE_LOG_DIR = os.path.join(BASE_DIR, "logs")
+# BASE_LOG_DIR = os.path.join(BASE_DIR, "logs")
+BASE_LOG_DIR = "/mnt/wwwlogs/logs"
 
 LOGGING = {
     'version': 1,
@@ -230,3 +235,8 @@ LOGGING = {
         },
     }
 }
+
+# 阿里云配置
+ACCESS_KEY_ID = 'LTAI7ojt8k01JjAV'
+ACCESS_KEY_SECRET  = 'Vhy0IH3n5ZFgnT892i3clEnrIjQiln'
+CDN_SERVER_ADDRESS = "https://cdn.aliyuncs.com"

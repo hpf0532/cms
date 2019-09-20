@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.contrib import auth
 from PIL import Image, ImageDraw, ImageFont
-from cms.utils import aliyun
+from utils.aliyun import AliyunUtil
 from io import BytesIO
 from geetest import GeetestLib
 from app01 import forms, models
@@ -11,11 +11,20 @@ from pytz import timezone
 import random
 import logging
 import json
+from cms.settings import ACCESS_KEY_ID, ACCESS_KEY_SECRET, CDN_SERVER_ADDRESS, UPLOAD_DIR
 
 # 生成一个logger实例，专门用来记录日志
 logger = logging.getLogger(__name__)
 
 cst_tz = timezone('Asia/Shanghai')
+
+def get_aliyun_obj():
+    obj = AliyunUtil(
+        access_key_id=ACCESS_KEY_ID,
+        access_key_secret=ACCESS_KEY_SECRET,
+        cdn_server_address=CDN_SERVER_ADDRESS
+    )
+    return obj
 # Create your views here.
 
 # 登录视图
@@ -97,7 +106,9 @@ def index(request):
             ret["status"] = 1
             ret["msg"] = "非法的文件名"
         else:
-            path = os.path.join("/mnt/wwwroot/apk/", filename)
+            path = os.path.join(UPLOAD_DIR, filename)
+            # path = os.path.join(BASE_DIR, filename)
+            print("path", path)
             with open(path, "wb") as f:
                 for chunk in file_obj.chunks():
                     f.write(chunk)
@@ -112,10 +123,11 @@ def index(request):
                     "ObjectType": "File",
                 }
                 # print(user_params["ObjectPath"])
-                cdn_server_address = "https://cdn.aliyuncs.com"
+                # cdn_server_address = "https://cdn.aliyuncs.com"
 
-                params = aliyun.compose_url(user_params)
-                res = requests.get(cdn_server_address, params=params)
+                ali_obj = get_aliyun_obj()
+                params = ali_obj.compose_url(user_params)
+                res = requests.get(CDN_SERVER_ADDRESS, params=params)
                 if res.status_code == 200:
                     ret["msg"] = "上传成功"
                     ret["url"] = "http://cdn.pursedada.com/"+filename
